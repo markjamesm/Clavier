@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clavier", "Clavier\Clavier.csproj", "{D426F78E-835E-4236-BB30-7590C6B701DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clavier", "Clavier.csproj", "{0576427D-8B66-4AD8-AB55-24D7EB94191B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D426F78E-835E-4236-BB30-7590C6B701DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D426F78E-835E-4236-BB30-7590C6B701DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D426F78E-835E-4236-BB30-7590C6B701DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D426F78E-835E-4236-BB30-7590C6B701DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0576427D-8B66-4AD8-AB55-24D7EB94191B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0576427D-8B66-4AD8-AB55-24D7EB94191B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0576427D-8B66-4AD8-AB55-24D7EB94191B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0576427D-8B66-4AD8-AB55-24D7EB94191B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
