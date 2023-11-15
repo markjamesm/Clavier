@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Clavier.Models;
 
-public class Collection
+public class Page
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

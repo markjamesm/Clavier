@@ -1,16 +1,23 @@
 using Clavier.Models;
 using Microsoft.EntityFrameworkCore;
 
+[assembly: Microsoft.AspNetCore.Mvc.ApiController]
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
+builder.Services.AddApiVersioning();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-builder.Services.AddDbContext<CollectionContext>(opt => opt.UseInMemoryDatabase("Collections"));
+// Add DB Contexts
+builder.Services.AddDbContext<PageContext>(opt => opt.UseInMemoryDatabase("Collections"));
+
 
 var app = builder.Build();
 
@@ -26,7 +33,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGet("/api/status", () => """{ "status": "⋆𝄞⋆ Clavier is operational! ⋆𝄞⋆" }""");
 
 app.Run();
