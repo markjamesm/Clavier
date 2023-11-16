@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sprocket.Models;
+using Sprocket.Services;
 
 namespace Sprocket.Controllers;
 

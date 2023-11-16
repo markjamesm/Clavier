@@ -5,7 +5,7 @@ using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Sprocket;
+using Sprocket.Services;
 
 [assembly: Microsoft.AspNetCore.Mvc.ApiController]
 
@@ -44,12 +44,11 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
-var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("Settings")["SymmetricSecurityKey"];
-
 builder.Services
-    .AddAuthentication()
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.IncludeErrorDetails = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ClockSkew = TimeSpan.Zero,
@@ -60,7 +59,7 @@ builder.Services
             ValidIssuer = "http://localhost:5288",
             ValidAudience = "http://localhost:5288",
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(symmetricSecurityKey)
+                Encoding.UTF8.GetBytes("f56gio90945j363n6b235by2b52b556b556b2qvff24rtv24v6tv246v424t24tvv5625b65")
             ),
         };
     });
@@ -105,7 +104,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStatusCodePages();
 
-// app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Sprocket;
+namespace Sprocket.Services;
 
 public class TokenService
 {
@@ -67,7 +67,7 @@ public class TokenService
         
         return new SigningCredentials(
             new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("Creating a custom secret key of adequate length, which is over 70 characters to be really secure")
+                Encoding.UTF8.GetBytes("f56gio90945j363n6b235by2b52b556b556b2qvff24rtv24v6tv246v424t24tvv5625b65")
             ),
             SecurityAlgorithms.HmacSha256
         );
