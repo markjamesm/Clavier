@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Sprocket.Models;
 
 namespace Sprocket.Controllers;
@@ -32,7 +33,7 @@ public class PageController : ControllerBase
         return todoItem;
     }
     
-    [HttpPost]
+    [HttpPost, Authorize]
     public async Task<ActionResult<Page>> PostPage(Page page)
     {
         _dbContext.Collections.Add(page);
