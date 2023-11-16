@@ -32,8 +32,8 @@ public class TokenService
     private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials,
         DateTime expiration) =>
         new(
-            "apiWithAuthBackend",
-            "apiWithAuthBackend",
+            "http://localhost:5288",
+            "http://localhost:5288",
             claims,
             expires: expiration,
             signingCredentials: credentials
@@ -63,7 +63,7 @@ public class TokenService
 
     private SigningCredentials CreateSigningCredentials()
     {
-        var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("Settings")["SymmetricSecurityKey"];
+        // var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("Settings")["SymmetricSecurityKey"];
         
         return new SigningCredentials(
             new SymmetricSecurityKey(

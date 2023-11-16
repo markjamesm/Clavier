@@ -5,7 +5,7 @@ using Sprocket.Models;
 namespace Sprocket.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
@@ -69,9 +69,13 @@ public class AuthController : ControllerBase
 
         var userInDb = _context.Users.FirstOrDefault(u => u.Email == request.Email);
         if (userInDb is null)
+        {
             return Unauthorized();
+        }
+        
         var accessToken = _tokenService.CreateToken(userInDb);
         await _context.SaveChangesAsync();
+        
         return Ok(new AuthResponse
         {
             Username = userInDb.UserName,

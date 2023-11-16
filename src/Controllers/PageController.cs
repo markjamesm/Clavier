@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Sprocket.Models;
 
@@ -23,7 +24,7 @@ public class PageController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Page>> GetPage(int id)
     {
-        var todoItem = await _dbContext.Collections.FindAsync(id);
+        var todoItem = await _dbContext.Pages.FindAsync(id);
 
         if (todoItem is null)
         {
@@ -36,7 +37,7 @@ public class PageController : ControllerBase
     [HttpPost, Authorize]
     public async Task<ActionResult<Page>> PostPage(Page page)
     {
-        _dbContext.Collections.Add(page);
+        _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();
         
         return CreatedAtAction(nameof(GetPage), new { id = page.Id }, page);

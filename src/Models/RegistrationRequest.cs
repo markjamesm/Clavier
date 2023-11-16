@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Sprocket.Controllers;
+namespace Sprocket.Models;
 
 public class RegistrationRequest
 {

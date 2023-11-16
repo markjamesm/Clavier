@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen(option =>
 var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("Settings")["SymmetricSecurityKey"];
 
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication()
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -57,8 +57,8 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "apiWithAuthBackend",
-            ValidAudience = "apiWithAuthBackend",
+            ValidIssuer = "http://localhost:5288",
+            ValidAudience = "http://localhost:5288",
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(symmetricSecurityKey)
             ),
@@ -73,7 +73,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add DB Contexts
 // Move the connection string to user secrets
 builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<UsersContext>();
+builder.Services.AddDbContext<UsersContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
 
 builder.Services.AddScoped<TokenService, TokenService>();
 
@@ -103,7 +103,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+app.UseStatusCodePages();
+
+// app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
