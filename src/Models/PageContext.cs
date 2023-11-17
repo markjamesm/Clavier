@@ -10,5 +10,5 @@ public class PageContext : DbContext
         
     }
 
-    public DbSet<Page> Collections => Set<Page>();
+    public DbSet<Page> Pages => Set<Page>();
 }

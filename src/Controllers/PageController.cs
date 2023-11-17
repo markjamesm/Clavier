@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Sprocket.Models;
 
 namespace Sprocket.Controllers;
@@ -19,10 +20,10 @@ public class PageController : ControllerBase
         _dbContext = dbContext;
     }
     
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<Page>> GetPage(int id)
     {
-        var todoItem = await _dbContext.Collections.FindAsync(id);
+        var todoItem = await _dbContext.Pages.FindAsync(id);
 
         if (todoItem is null)
         {
@@ -32,10 +33,11 @@ public class PageController : ControllerBase
         return todoItem;
     }
     
-    [HttpPost]
+    [HttpPost, Authorize]
     public async Task<ActionResult<Page>> PostPage(Page page)
     {
-        _dbContext.Collections.Add(page);
+        _logger.LogInformation("Hitting endpoint");
+        _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();
         
         return CreatedAtAction(nameof(GetPage), new { id = page.Id }, page);

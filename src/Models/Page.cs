@@ -8,6 +8,6 @@ public class Page
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public string? Name { get; set; }
-    public int AccountId { get; set; }
+    public string? Title { get; set; }
+    public string? Body { get; set; }
 }
