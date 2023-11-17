@@ -9,12 +9,10 @@ namespace Sprocket.Services;
 public class TokenService
 {
     private const int ExpirationMinutes = 30;
-    private readonly IConfiguration _configuration;
     private readonly ILogger<TokenService> _logger;
 
-    public TokenService(IConfiguration configuration, ILogger<TokenService> logger)
+    public TokenService(ILogger<TokenService> logger)
     {
-        _configuration = configuration;
         _logger = logger;
     }
 
@@ -27,14 +25,17 @@ public class TokenService
             expiration
         );
         var tokenHandler = new JwtSecurityTokenHandler();
+        
+        _logger.LogInformation("JWT Token created");
+        
         return tokenHandler.WriteToken(token);
     }
 
     private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials,
         DateTime expiration) =>
         new(
-            "http://localhost:5288",
-            "http://localhost:5288",
+            new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("JwtTokenSettings")["ValidIssuer"],
+            new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("JwtTokenSettings")["ValidAudience"],
             claims,
             expires: expiration,
             signingCredentials: credentials
@@ -42,11 +43,13 @@ public class TokenService
 
     private List<Claim> CreateClaims(IdentityUser user)
     {
+        var jwtSub = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("JwtTokenSettings")["JwtRegisteredClaimNamesSub"];
+        
         try
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, "TokenForTheApiWithAuth"),
+                new Claim(JwtRegisteredClaimNames.Sub, jwtSub),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -65,11 +68,11 @@ public class TokenService
 
     private SigningCredentials CreateSigningCredentials()
     {
-        // var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("Settings")["SymmetricSecurityKey"];
+        var symmetricSecurityKey = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("JwtTokenSettings")["SymmetricSecurityKey"];
         
         return new SigningCredentials(
             new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("f56gio90945j363n6b235by2b52b556b556b2qvff24rtv24v6tv246v424t24tvv5625b65")
+                Encoding.UTF8.GetBytes(symmetricSecurityKey)
             ),
             SecurityAlgorithms.HmacSha256
         );

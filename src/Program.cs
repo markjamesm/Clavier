@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Sprocket.Services;
@@ -43,6 +42,10 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
+var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
+var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
+var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -55,10 +58,10 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "http://localhost:5288",
-            ValidAudience = "http://localhost:5288",
+            ValidIssuer = validIssuer,
+            ValidAudience = validAudience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("f56gio90945j363n6b235by2b52b556b556b2qvff24rtv24v6tv246v424t24tvv5625b65")
+                Encoding.UTF8.GetBytes(symmetricSecurityKey)
             ),
         };
     });
@@ -70,7 +73,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Add DB Contexts
 // Move the connection string to user secrets
 builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<UsersContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
+builder.Services.AddDbContext<UserContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
 
 builder.Services.AddScoped<TokenService, TokenService>();
 
@@ -87,7 +90,7 @@ builder.Services
         options.Password.RequireUppercase = false;
         options.Password.RequireLowercase = false;
     })
-    .AddEntityFrameworkStores<UsersContext>();
+    .AddEntityFrameworkStores<UserContext>();
 
 // Build the app
 var app = builder.Build();
