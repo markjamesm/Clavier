@@ -12,12 +12,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<IdentityUser> _userManager;
     private readonly UsersContext _context;
     private readonly TokenService _tokenService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(UserManager<IdentityUser> userManager, UsersContext context, TokenService tokenService)
+    public AuthController(UserManager<IdentityUser> userManager, UsersContext context, TokenService tokenService, ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _context = context;
         _tokenService = tokenService;
+        _logger = logger;
     }
 
     [HttpPost]

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Sprocket.Models;
 
@@ -21,7 +20,7 @@ public class PageController : ControllerBase
         _dbContext = dbContext;
     }
     
-    [HttpGet]
+    [HttpGet, Authorize]
     public async Task<ActionResult<Page>> GetPage(int id)
     {
         var todoItem = await _dbContext.Pages.FindAsync(id);
@@ -37,6 +36,7 @@ public class PageController : ControllerBase
     [HttpPost, Authorize]
     public async Task<ActionResult<Page>> PostPage(Page page)
     {
+        _logger.LogInformation("Hitting endpoint");
         _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();
         

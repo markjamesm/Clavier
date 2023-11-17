@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Sprocket.Services;
-
-[assembly: Microsoft.AspNetCore.Mvc.ApiController]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,7 +66,6 @@ builder.Services
 builder.Services.AddProblemDetails();
 builder.Services.AddApiVersioning();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-
 
 // Add DB Contexts
 // Move the connection string to user secrets
