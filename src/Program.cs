@@ -42,6 +42,7 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
+// These will eventually be moved to a secrets file, but for alpha development appsettings is fine
 var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
 var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
 var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");

@@ -58,7 +58,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var managedUser = await _userManager.FindByEmailAsync(request.Email);
+        var managedUser = await _userManager.FindByEmailAsync(request.Username);
         if (managedUser == null)
         {
             return BadRequest("Bad credentials");
@@ -70,7 +70,7 @@ public class AuthController : ControllerBase
             return BadRequest("Bad credentials");
         }
 
-        var userInDb = _context.Users.FirstOrDefault(u => u.Email == request.Email);
+        var userInDb = _context.Users.FirstOrDefault(u => u.Email == request.Username);
         if (userInDb is null)
         {
             return Unauthorized();

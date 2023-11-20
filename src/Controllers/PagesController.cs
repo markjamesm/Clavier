@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Sprocket.Models;
 
 namespace Sprocket.Controllers;
@@ -9,34 +10,43 @@ namespace Sprocket.Controllers;
 [ApiVersion( 1.0 )]
 [ApiController]
 [Route("api/[controller]" )]
-public class PageController : ControllerBase
+public class PagesController : ControllerBase
 {
-    private readonly ILogger<PageController> _logger;
+    private readonly ILogger<PagesController> _logger;
     private readonly PageContext _dbContext;
 
-    public PageController(ILogger<PageController> logger, PageContext dbContext)
+    public PagesController(ILogger<PagesController> logger, PageContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;
     }
     
-    [HttpGet, Authorize]
+    
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Page>> GetPage(int id)
     {
-        var todoItem = await _dbContext.Pages.FindAsync(id);
+        var page = await _dbContext.Pages.FindAsync(id);
 
-        if (todoItem is null)
+        if (page is null)
         {
             return NotFound();
         }
 
-        return todoItem;
+        return page;
+    }
+
+    
+    [HttpGet]
+    public async Task<List<Page>> ListPages()
+    {
+        var pages = await _dbContext.Pages.ToListAsync();
+        return pages;
     }
     
-    [HttpPost, Authorize]
-    public async Task<ActionResult<Page>> PostPage(Page page)
+    
+    [HttpPost("new"), Authorize]
+    public async Task<ActionResult<Page>> CreatePage(Page page)
     {
-        _logger.LogInformation("Hitting endpoint");
         _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();
         
