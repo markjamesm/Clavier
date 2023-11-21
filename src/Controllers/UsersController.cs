@@ -7,14 +7,14 @@ namespace Sprocket.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-public class AuthController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly UserContext _context;
     private readonly TokenService _tokenService;
-    private readonly ILogger<AuthController> _logger;
+    private readonly ILogger<UsersController> _logger;
 
-    public AuthController(UserManager<IdentityUser> userManager, UserContext context, TokenService tokenService, ILogger<AuthController> logger)
+    public UsersController(UserManager<IdentityUser> userManager, UserContext context, TokenService tokenService, ILogger<UsersController> logger)
     {
         _userManager = userManager;
         _context = context;
@@ -30,9 +30,9 @@ public class AuthController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-
+        
         var result = await _userManager.CreateAsync(
-            new IdentityUser { UserName = request.Username, Email = request.Email },
+            new ApplicationUser { UserName = request.Username, Email = request.Email, UserFlag = request.UserType},
             request.Password
         );
         if (result.Succeeded)
