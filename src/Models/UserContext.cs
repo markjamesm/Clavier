@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Sprocket.Models;
 
-public class UserContext : IdentityUserContext<ApplicationUser>
+public class UserContext : IdentityUserContext<IdentityUser>
 {
     public UserContext (DbContextOptions<UserContext> options)
         : base(options)

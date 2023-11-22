@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
         }
         
         var result = await _userManager.CreateAsync(
-            new ApplicationUser { UserName = request.Username, Email = request.Email, UserFlag = request.UserType},
+            new IdentityUser { UserName = request.Username, Email = request.Email},
             request.Password
         );
         if (result.Succeeded)

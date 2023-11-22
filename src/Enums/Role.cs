@@ -1,5 +1,6 @@
 namespace Sprocket.Enums;
-public enum UserType
+
+public enum Role
 {
     Admin,
     User
