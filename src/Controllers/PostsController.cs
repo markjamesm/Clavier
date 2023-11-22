@@ -47,6 +47,11 @@ public class PostsController : ControllerBase
     [HttpPost("new"), Authorize]
     public async Task<ActionResult<Page>> CreatePost(Page page)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();
         
