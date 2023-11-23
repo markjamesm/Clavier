@@ -5,6 +5,7 @@ using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Sprocket.Helpers;
 using Sprocket.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,12 +78,14 @@ builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;
 builder.Services.AddDbContext<PostContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
 builder.Services.AddDbContext<UserContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
 
+// Add our Sprocket dependencies
 builder.Services.AddScoped<TokenService, TokenService>();
+builder.Services.AddTransient<SeedAdminAccount>();
 
 
 // Specify identity requirements
 builder.Services
-    .AddIdentityCore<IdentityUser>(options =>
+    .AddIdentityCore<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.User.RequireUniqueEmail = true;
@@ -96,6 +99,8 @@ builder.Services
 
 // Build the app
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

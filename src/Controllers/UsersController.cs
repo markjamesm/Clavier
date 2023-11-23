@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Sprocket.Enums;
 using Sprocket.Models;
 using Sprocket.Services;
 
@@ -22,7 +24,9 @@ public class UsersController : ControllerBase
         _logger = logger;
     }
 
+    
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [Route("register")]
     public async Task<IActionResult> Register(RegistrationRequest request)
     {
@@ -32,7 +36,35 @@ public class UsersController : ControllerBase
         }
         
         var result = await _userManager.CreateAsync(
-            new IdentityUser { UserName = request.Username, Email = request.Email},
+            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = request.Role},
+            request.Password
+        );
+        if (result.Succeeded)
+        {
+            request.Password = "";
+            return CreatedAtAction(nameof(Register), new { email = request.Email, role = request.Role }, request);
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+
+        return BadRequest(ModelState);
+    }
+    
+    
+    [HttpPost]
+    [Route("create")]
+    public async Task<IActionResult> Create(RegistrationRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        var result = await _userManager.CreateAsync(
+            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = Role.User },
             request.Password
         );
         if (result.Succeeded)
@@ -49,6 +81,7 @@ public class UsersController : ControllerBase
         return BadRequest(ModelState);
     }
 
+    
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<AuthResponse>> Authenticate([FromBody] AuthRequest request)
