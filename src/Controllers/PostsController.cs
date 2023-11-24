@@ -13,9 +13,9 @@ namespace Sprocket.Controllers;
 public class PostsController : ControllerBase
 {
     private readonly ILogger<PagesController> _logger;
-    private readonly PageContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public PostsController(ILogger<PagesController> logger, PageContext dbContext)
+    public PostsController(ILogger<PagesController> logger, ApplicationDbContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;

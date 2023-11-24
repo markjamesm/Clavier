@@ -12,11 +12,11 @@ namespace Sprocket.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly UserContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly TokenService _tokenService;
     private readonly ILogger<UsersController> _logger;
 
-    public UsersController(UserManager<ApplicationUser> userManager, UserContext context, TokenService tokenService, ILogger<UsersController> logger)
+    public UsersController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, TokenService tokenService, ILogger<UsersController> logger)
     {
         _userManager = userManager;
         _context = context;

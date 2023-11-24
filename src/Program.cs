@@ -6,7 +6,6 @@ using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Sprocket.Helpers;
 using Sprocket.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,14 +48,10 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 // Add DB Contexts
 // Move the connection string to user secrets for release
-builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<PostContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<UserContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
+builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
 
 // Add our Sprocket dependencies
 builder.Services.AddScoped<TokenService, TokenService>();
-builder.Services.AddTransient<SeedAdminAccount>();
-
 
 // Support string to enum conversions
 builder.Services.AddControllers().AddJsonOptions(opt =>
@@ -79,7 +74,7 @@ builder.Services
         options.Password.RequireLowercase = false;
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<UserContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
 // These will eventually be moved to a secrets file, but for alpha development appsettings is fine

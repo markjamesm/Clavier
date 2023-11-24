@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Sprocket.Models;
+using Page = Sprocket.Models.Page;
 
 namespace Sprocket.Controllers;
 
@@ -13,9 +15,9 @@ namespace Sprocket.Controllers;
 public class PagesController : ControllerBase
 {
     private readonly ILogger<PagesController> _logger;
-    private readonly PageContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public PagesController(ILogger<PagesController> logger, PageContext dbContext)
+    public PagesController(ILogger<PagesController> logger, ApplicationDbContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;
