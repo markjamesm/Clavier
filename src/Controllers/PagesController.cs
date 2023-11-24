@@ -44,7 +44,8 @@ public class PagesController : ControllerBase
     }
     
     
-    [HttpPost("new"), Authorize]
+    [Authorize (Roles = "Admin")]
+    [HttpPost("new")]
     public async Task<ActionResult<Page>> CreatePage(Page page)
     {
         if (!ModelState.IsValid)

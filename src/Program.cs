@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Sprocket.Models;
@@ -42,14 +43,54 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.AddProblemDetails();
+builder.Services.AddApiVersioning();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+// Add DB Contexts
+// Move the connection string to user secrets for release
+builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
+builder.Services.AddDbContext<PostContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
+builder.Services.AddDbContext<UserContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
+
+// Add our Sprocket dependencies
+builder.Services.AddScoped<TokenService, TokenService>();
+builder.Services.AddTransient<SeedAdminAccount>();
+
+
+// Support string to enum conversions
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+
+// Specify identity requirements
+// Must be added before .AddAuthentication otherwise a 404 is thrown on authorized endpoints
+builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<UserContext>();
+
 
 // These will eventually be moved to a secrets file, but for alpha development appsettings is fine
 var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
 var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
 var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options => {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;})
     .AddJwtBearer(options =>
     {
         options.IncludeErrorDetails = true;
@@ -67,35 +108,6 @@ builder.Services
             ),
         };
     });
-
-builder.Services.AddProblemDetails();
-builder.Services.AddApiVersioning();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-
-// Add DB Contexts
-// Move the connection string to user secrets for release
-builder.Services.AddDbContext<PageContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<PostContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-builder.Services.AddDbContext<UserContext>(opt => opt.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=devpass"));
-
-// Add our Sprocket dependencies
-builder.Services.AddScoped<TokenService, TokenService>();
-builder.Services.AddTransient<SeedAdminAccount>();
-
-
-// Specify identity requirements
-builder.Services
-    .AddIdentityCore<ApplicationUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = false;
-        options.User.RequireUniqueEmail = true;
-        options.Password.RequireDigit = false;
-        options.Password.RequiredLength = 6;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-    })
-    .AddEntityFrameworkStores<UserContext>();
 
 // Build the app
 var app = builder.Build();
