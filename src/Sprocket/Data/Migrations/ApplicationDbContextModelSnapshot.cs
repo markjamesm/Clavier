@@ -8,7 +8,7 @@ using Sprocket.Models;
 
 #nullable disable
 
-namespace Sprocket.Migrations
+namespace Sprocket.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -88,7 +88,7 @@ namespace Sprocket.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Sprocket.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -159,22 +159,22 @@ namespace Sprocket.Migrations
                         {
                             Id = "80c8b6b1-e2b6-45e8-b044-8f2178a90111",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4104152c-2a96-4b34-bdac-85d449c85322",
+                            ConcurrencyStamp = "7e5445e8-d02d-45a4-8ca0-f48e9e0ff010",
                             Email = "example@sprocket.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "EXAMPLE@SPROCKET.COM",
                             NormalizedUserName = "EXAMPLE@SPROCKET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKDiLxiUTyrj6QtNXh5BPMVtg6fiVUey7CyXUJm3IrUJAr8Kb9+UDTLLp1uC4fuCEw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPvpi82H/gKuog6iRPT3KBj2OAtd/hNLaKeZqUvqwUZ6Fcv5NSQI7Algx1AEdNN/Sw==",
                             PhoneNumberConfirmed = false,
                             Role = 0,
-                            SecurityStamp = "153b2702-6495-4fad-bbfe-a70c028c3e8d",
+                            SecurityStamp = "3613bf9c-8144-4fb8-8300-a8552bf90104",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
                 });
 
-            modelBuilder.Entity("Core.Models.Page", b =>
+            modelBuilder.Entity("Sprocket.Models.Page", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -196,7 +196,7 @@ namespace Sprocket.Migrations
                     b.ToTable("Pages");
                 });
 
-            modelBuilder.Entity("Core.Models.Post", b =>
+            modelBuilder.Entity("Sprocket.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,7 +220,7 @@ namespace Sprocket.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Core.Models.ApplicationUser", null)
+                    b.HasOne("Sprocket.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -229,7 +229,7 @@ namespace Sprocket.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Core.Models.ApplicationUser", null)
+                    b.HasOne("Sprocket.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -238,7 +238,7 @@ namespace Sprocket.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Core.Models.ApplicationUser", null)
+                    b.HasOne("Sprocket.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Sprocket.Migrations
+namespace Sprocket.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -132,7 +132,7 @@ namespace Sprocket.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "80c8b6b1-e2b6-45e8-b044-8f2178a90111", 0, "4104152c-2a96-4b34-bdac-85d449c85322", "example@sprocket.com", false, false, null, "EXAMPLE@SPROCKET.COM", "EXAMPLE@SPROCKET.COM", "AQAAAAIAAYagAAAAEKDiLxiUTyrj6QtNXh5BPMVtg6fiVUey7CyXUJm3IrUJAr8Kb9+UDTLLp1uC4fuCEw==", null, false, 0, "153b2702-6495-4fad-bbfe-a70c028c3e8d", false, "admin" });
+                values: new object[] { "80c8b6b1-e2b6-45e8-b044-8f2178a90111", 0, "7e5445e8-d02d-45a4-8ca0-f48e9e0ff010", "example@sprocket.com", false, false, null, "EXAMPLE@SPROCKET.COM", "EXAMPLE@SPROCKET.COM", "AQAAAAIAAYagAAAAEPvpi82H/gKuog6iRPT3KBj2OAtd/hNLaKeZqUvqwUZ6Fcv5NSQI7Algx1AEdNN/Sw==", null, false, 0, "3613bf9c-8144-4fb8-8300-a8552bf90104", false, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
