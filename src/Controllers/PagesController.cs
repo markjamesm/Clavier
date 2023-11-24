@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Sprocket.Models;
 using Page = Sprocket.Models.Page;
 
@@ -25,7 +24,7 @@ public class PagesController : ControllerBase
     
     
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Page>> GetPage(int id)
+    public async Task<ActionResult<PageDto>> GetPage(int id)
     {
         var page = await _dbContext.Pages.FindAsync(id);
 
@@ -33,27 +32,59 @@ public class PagesController : ControllerBase
         {
             return NotFound();
         }
+        
+        var pageDto = new PageDto
+        {
+            Id = page.Id,
+            Author = page.Author,
+            Body = page.Body,
+            Title = page.Title
+        };
 
-        return page;
+        return pageDto;
     }
 
     
     [HttpGet]
-    public async Task<List<Page>> ListPages()
+    public async Task<PagesDto> ListPages()
     {
-        var pages = await _dbContext.Pages.ToListAsync();
-        return pages;
+        var pagesFromDb = await _dbContext.Pages.ToListAsync();
+        
+        var pagesDto = new PagesDto();
+        
+        foreach (var page in pagesFromDb)
+        {
+            var pageDto = new PageDto
+            {
+                Id = page.Id,
+                Author = page.Author,
+                Body = page.Body,
+                Title = page.Title
+            };
+            
+            pagesDto.Pages.Add(pageDto);
+        }
+        
+        return pagesDto;
     }
     
     
     [Authorize (Roles = "Admin")]
     [HttpPost("new")]
-    public async Task<ActionResult<Page>> CreatePage(Page page)
+    public async Task<ActionResult<Page>> CreatePage(PageDto pageDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+        
+        var page = new Page
+        {
+            Id = pageDto.Id,
+            Title = pageDto.Title,
+            Author = pageDto.Author,
+            Body = pageDto.Body,
+        };
         
         _dbContext.Pages.Add(page);
         await _dbContext.SaveChangesAsync();

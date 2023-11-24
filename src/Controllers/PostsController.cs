@@ -23,39 +23,71 @@ public class PostsController : ControllerBase
     
     
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Page>> GetPost(int id)
+    public async Task<ActionResult<PostDto>> GetPost(int id)
     {
-        var page = await _dbContext.Pages.FindAsync(id);
+        var post = await _dbContext.Posts.FindAsync(id);
 
-        if (page is null)
+        if (post is null)
         {
             return NotFound();
         }
+        
+        var postDto = new PostDto
+        {
+            Id = post.Id,
+            Author = post.Author,
+            Body = post.Body,
+            Title = post.Title
+        };
 
-        return page;
+        return postDto;
     }
 
     
     [HttpGet]
-    public async Task<List<Page>> ListPosts()
+    public async Task<PostsDto> ListPosts()
     {
-        var pages = await _dbContext.Pages.ToListAsync();
-        return pages;
+        var postsFromDb = await _dbContext.Posts.ToListAsync();
+        
+        var postsDto = new PostsDto();
+        
+        foreach (var post in postsFromDb)
+        {
+            var postDto = new PostDto
+            {
+                Id = post.Id,
+                Author = post.Author,
+                Body = post.Body,
+                Title = post.Title
+            };
+            
+            postsDto.Posts.Add(postDto);
+        }
+        
+        return postsDto;
     }
     
     
     [Authorize (Roles = "Admin")]
     [HttpPost("new")]
-    public async Task<ActionResult<Page>> CreatePost(Page page)
+    public async Task<ActionResult<Page>> CreatePost(PostDto postDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+
+        var post = new Post
+        {
+            Id = postDto.Id,
+            Title = postDto.Title,
+            Author = postDto.Author,
+            Body = postDto.Body,
+        };
         
-        _dbContext.Pages.Add(page);
+        _dbContext.Posts.Add(post);
         await _dbContext.SaveChangesAsync();
         
-        return CreatedAtAction(nameof(GetPost), new { id = page.Id }, page);
+        return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post);
     }
 }

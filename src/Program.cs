@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Sprocket.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
@@ -106,7 +107,6 @@ builder.Services.AddAuthentication(options => {
 
 // Build the app
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline
