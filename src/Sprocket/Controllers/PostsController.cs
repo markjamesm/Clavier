@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Sprocket.Data;
 using Sprocket.Models;
 
 namespace Sprocket.Controllers;

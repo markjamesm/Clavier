@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Sprocket.Data;
 using Sprocket.Enums;
 using Sprocket.Models;
 using Sprocket.Services;
@@ -35,7 +36,7 @@ public class UsersController : ControllerBase
         }
         
         var result = await _userManager.CreateAsync(
-            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = Role.User },
+            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = request.Role },
             request.Password
         );
         if (result.Succeeded)

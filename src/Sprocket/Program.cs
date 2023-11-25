@@ -6,6 +6,7 @@ using Sprocket.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Sprocket.Data;
 using Sprocket.Services;
 
 
@@ -104,6 +105,7 @@ builder.Services.AddAuthentication(options => {
             ),
         };
     });
+
 
 // Build the app
 var app = builder.Build();
