@@ -2,9 +2,13 @@
 
 Sprocket is a modern, flexible headless CMS written in .NET. 
 
-## Project Status
+> **Note**
+> Sprocket is actively being developed and is in a very early alpha stage.
 
-Development is in a very early alpha stage so expect many changes in the coming weeks!
+
+## Features
+
+* JWT authentication with roles
 
 ## Planned Features
 

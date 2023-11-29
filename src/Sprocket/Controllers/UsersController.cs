@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Sprocket.Data;
 using Sprocket.Enums;
 using Sprocket.Models;
 using Sprocket.Services;
@@ -11,12 +12,12 @@ namespace Sprocket.Controllers;
 [Route("/api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly UserContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _context;
     private readonly TokenService _tokenService;
     private readonly ILogger<UsersController> _logger;
 
-    public UsersController(UserManager<IdentityUser> userManager, UserContext context, TokenService tokenService, ILogger<UsersController> logger)
+    public UsersController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, TokenService tokenService, ILogger<UsersController> logger)
     {
         _userManager = userManager;
         _context = context;
@@ -26,7 +27,6 @@ public class UsersController : ControllerBase
 
     
     [HttpPost]
-    [Authorize(Roles = "Admin")]
     [Route("register")]
     public async Task<IActionResult> Register(RegistrationRequest request)
     {
@@ -36,13 +36,13 @@ public class UsersController : ControllerBase
         }
         
         var result = await _userManager.CreateAsync(
-            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = request.Role},
+            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = request.Role },
             request.Password
         );
         if (result.Succeeded)
         {
             request.Password = "";
-            return CreatedAtAction(nameof(Register), new { email = request.Email, role = request.Role }, request);
+            return CreatedAtAction(nameof(Register), new { email = request.Email, role = Role.User }, request);
         }
 
         foreach (var error in result.Errors)
@@ -54,6 +54,7 @@ public class UsersController : ControllerBase
     }
     
     
+    [Authorize (Roles = "Admin")]
     [HttpPost]
     [Route("create")]
     public async Task<IActionResult> Create(RegistrationRequest request)
@@ -64,7 +65,7 @@ public class UsersController : ControllerBase
         }
         
         var result = await _userManager.CreateAsync(
-            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = Role.User },
+            new ApplicationUser { UserName = request.Username, Email = request.Email, Role = request.Role },
             request.Password
         );
         if (result.Succeeded)
