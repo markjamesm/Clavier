@@ -46,9 +46,11 @@ public class PostsController : ControllerBase
 
     
     [HttpGet]
-    public async Task<PostsDto> ListPosts()
+    public async Task<ActionResult<PostsDto>> ListPosts(int postNumber = 1, int postSize = 10)
     {
-        var postsFromDb = await _dbContext.Posts.ToListAsync();
+        int skipItem = (postNumber - 1) * postSize;
+
+        var postsFromDb = await _dbContext.Posts.Skip(skipItem).Take(postSize).ToListAsync();
         
         var postsDto = new PostsDto();
         
