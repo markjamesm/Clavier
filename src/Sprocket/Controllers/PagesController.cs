@@ -48,7 +48,7 @@ public class PagesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<PagesDto>> ListPages(int pageNum = 1, int pageSize = 10)
     {
-        int skipItem = (pageNum - 1) * pageSize;
+        var skipItem = (pageNum - 1) * pageSize;
 
         var pagesFromDb = await _dbContext.Pages.Skip(skipItem).Take(pageSize).ToListAsync();
         
